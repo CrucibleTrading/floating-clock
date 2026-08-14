@@ -20,9 +20,16 @@ final class ClockView: NSView {
         NSFont.monospacedDigitSystemFont(ofSize: fontSize, weight: .semibold)
     }
 
-    func fittingSize(for sample: String = "00:00:00") -> NSSize {
-        let s = (sample as NSString).size(withAttributes: [.font: font])
-        return NSSize(width: ceil(s.width) + 36, height: ceil(s.height) + 24)
+    /// Widest of the supplied samples, plus padding. Takes an array because
+    /// `monospacedDigitSystemFont` only monospaces DIGITS — the letters in
+    /// " AM" and " PM" are proportional and differ in width.
+    func fittingSize(for samples: [String]) -> NSSize {
+        var w: CGFloat = 0, h: CGFloat = 0
+        for s in samples {
+            let sz = (s as NSString).size(withAttributes: [.font: font])
+            w = max(w, sz.width); h = max(h, sz.height)
+        }
+        return NSSize(width: ceil(w) + 40, height: ceil(h) + 24)
     }
 
     override func draw(_ dirtyRect: NSRect) {
@@ -69,7 +76,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         view = ClockView()
         view.fontSize = CGFloat(savedSize)
 
-        let size = view.fittingSize()
+        // Size for the widest string this format can produce — NOT a bare
+        // "00:00:00", which is 3 characters short once " AM"/" PM" is appended.
+        let size = view.fittingSize(for: use24Hour ? ["00:00:00"]
+                                                   : ["00:00:00 AM", "00:00:00 PM"])
         window = NSWindow(contentRect: NSRect(origin: .zero, size: size),
                           styleMask: [.borderless],
                           backing: .buffered,
@@ -186,13 +196,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         d.set(NSStringFromPoint(window.frame.origin), forKey: "origin")
     }
 
+    /// Samples that bound the widest string the clock can ever render.
+    private func sampleStrings() -> [String] {
+        use24Hour ? ["00:00:00"] : ["00:00:00 AM", "00:00:00 PM"]
+    }
+
     private func resizeToFit() {
-        let origin = window.frame.origin
-        let sample = use24Hour ? "00:00:00" : "00:00:00 AM"
-        var f = window.frame
-        f.size = view.fittingSize(for: sample)
-        f.origin = origin
-        window.setFrame(f, display: true)
+        let old = window.frame
+        let newSize = view.fittingSize(for: sampleStrings())
+        // Keep the visual top-left pinned. AppKit origins are bottom-left, so
+        // holding origin fixed would make the panel grow upward off its corner.
+        let origin = NSPoint(x: old.origin.x,
+                             y: old.origin.y + old.size.height - newSize.height)
+        window.setFrame(NSRect(origin: origin, size: newSize), display: true)
         view.needsDisplay = true
     }
 
