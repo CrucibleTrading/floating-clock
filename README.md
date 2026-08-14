@@ -73,3 +73,9 @@ macOS desktop widgets (Sonoma onward) sit on the desktop surface, behind every
 window. There is no supported way to promote a WidgetKit widget to always-on-top.
 Floating requires a regular app with a borderless `NSWindow` at a raised
 `NSWindow.Level` — which is what this is, in about 200 lines.
+
+## Support
+
+This project is provided **as-is**, with no support. It scratches a personal
+itch and is shared in case it is useful to others; issues and pull requests may
+not receive a response.
