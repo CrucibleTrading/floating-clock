@@ -6,6 +6,10 @@ stock Clock widget has no seconds display at any size.
 
 Tested on macOS 26.4.1 (Tahoe), Swift 6.3.1.
 
+![The clock floating over the desktop, showing 10:21:04 AM on its translucent background panel](docs/images/clock.png)
+
+![The menu-bar dropdown with Hide Clock, Size, 24-Hour Time, Background Panel, Float Above Everything, and Quit items](docs/images/menu-item.png)
+
 ## Build
 
     swiftc -O FloatingClock.swift -o FloatingClock
