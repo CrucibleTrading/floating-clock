@@ -1,11 +1,11 @@
-# build artifacts
-FloatingClock
+# build artifacts (root-anchored: dist/FloatingClock.app ships its binary)
+/FloatingClock
 *.o
 .build/
 DerivedData/
 
-# bundle: keep Info.plist, ignore the compiled executable
-FloatingClock.app/Contents/MacOS/
-FloatingClock.app/Contents/_CodeSignature/
+# root bundle is build output: keep Info.plist, ignore the compiled executable
+/FloatingClock.app/Contents/MacOS/
+/FloatingClock.app/Contents/_CodeSignature/
 
 .DS_Store

@@ -48,7 +48,9 @@ Built and verified on **macOS 26.4.1 (Tahoe), Swift 6.3.1, Xcode 26.4.1**.
 | Path | Purpose |
 |---|---|
 | `FloatingClock.swift` | Entire app — `ClockView` (drawing) + `AppDelegate` (window, menu, timer) |
-| `FloatingClock.app/` | Bundle. Only `Info.plist` is tracked; the binary is gitignored |
+| `FloatingClock.app/` | Build-output bundle. Only `Info.plist` is tracked; the binary is gitignored |
+| `dist/FloatingClock.app/` | Pre-built, ad-hoc-signed app committed for Xcode-less installs. **Rebuild it whenever the source changes** (same steps as the root bundle, into `dist/`) |
+| `docs/images/` | README screenshots |
 | `README.md` | User-facing docs |
 | `CLAUDE.md` | This file |
 

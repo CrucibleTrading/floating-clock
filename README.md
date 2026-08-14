@@ -10,6 +10,21 @@ Tested on macOS 26.4.1 (Tahoe), Swift 6.3.1.
 
 ![The menu-bar dropdown with Hide Clock, Size, 24-Hour Time, Background Panel, Float Above Everything, and Quit items](docs/images/menu-item.png)
 
+## Install
+
+No Xcode needed — a pre-built app is included at `dist/FloatingClock.app`.
+
+1. Clone or download this repo.
+2. Copy `dist/FloatingClock.app` to `/Applications` (or `~/Applications`).
+3. Launch it. The app is ad-hoc signed, so the first launch on your Mac may be
+   blocked by Gatekeeper — right-click the app, choose **Open**, then **Open**
+   again. If you downloaded the repo as a ZIP and macOS still refuses, clear the
+   quarantine flag first:
+
+       xattr -cr /Applications/FloatingClock.app
+
+To start it at login: System Settings → General → Login Items → add it.
+
 ## Build
 
     swiftc -O FloatingClock.swift -o FloatingClock
@@ -20,6 +35,9 @@ To rebuild the double-clickable bundle:
     cp FloatingClock FloatingClock.app/Contents/MacOS/
     # Info.plist is already in the bundle; LSUIElement=true keeps it out of the Dock
     codesign --force --deep -s - FloatingClock.app
+
+If you change the source, rebuild the committed pre-built app the same way so
+`dist/FloatingClock.app` stays in sync.
 
 ## Use
 
@@ -48,11 +66,6 @@ visibility persist across launches via `UserDefaults`.
 - **Monospaced digits** so the width doesn't jitter as seconds tick.
 - Timer runs on `.common` run-loop mode so it keeps updating while you drag it.
 - Redraws only when the displayed string actually changes, not 10x/second.
-
-## Install
-
-Copy `FloatingClock.app` to `/Applications` or `~/Applications`. To start it at
-login: System Settings → General → Login Items → add it.
 
 ## Why not a widget
 
