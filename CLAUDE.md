@@ -85,7 +85,16 @@ monitor, intrusive on a laptop. Both are intentional.
 **`collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .stationary]`**
 so it follows across Spaces and survives fullscreen apps.
 
-## Bug already fixed — do not reintroduce
+## Bugs already fixed — do not reintroduce
+
+**Menu-bar item vanished after "Hide Clock"** (fixed in `keep the status item
+alive across menu rebuilds`).
+
+`buildMenu()` ran on every menu action and created a fresh `NSStatusItem` each
+time, deallocating the live one (which removes it from the menu bar) while its
+menu was still tracking. The item must be created exactly once — `buildMenu()`
+now guards creation behind `if statusItem == nil` and only rebuilds the
+`NSMenu`. Never recreate the `NSStatusItem` to refresh menu state.
 
 **Clipped leading/trailing characters at launch** (fixed in `fix clipped digits
 at launch`).

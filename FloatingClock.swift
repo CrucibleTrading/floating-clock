@@ -123,8 +123,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     // MARK: menu
 
     private func buildMenu() {
-        statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-        statusItem.button?.title = "⏱"
+        // Create the status item exactly once. Rebuilding it on every menu
+        // action deallocates the live item (removing it from the menu bar)
+        // while its menu is still tracking — the item then vanishes even
+        // though the app keeps running. Only the NSMenu is rebuilt below.
+        if statusItem == nil {
+            statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+            statusItem.button?.title = "⏱"
+        }
 
         let menu = NSMenu()
         menu.addItem(withTitle: visible ? "Hide Clock" : "Show Clock",
