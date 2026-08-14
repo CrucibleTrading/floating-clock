@@ -1,2 +1,11 @@
+# build artifacts
 FloatingClock
-FloatingClock.app/
+*.o
+.build/
+DerivedData/
+
+# bundle: keep Info.plist, ignore the compiled executable
+FloatingClock.app/Contents/MacOS/
+FloatingClock.app/Contents/_CodeSignature/
+
+.DS_Store
